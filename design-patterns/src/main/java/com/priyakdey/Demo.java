@@ -1,5 +1,6 @@
 package com.priyakdey;
 
+import com.priyakdey.singleton.DatabaseConnection;
 import com.priyakdey.singleton.SingletonExample;
 
 /**
@@ -37,6 +38,23 @@ public class Demo {
         t1.start();
         t2.start();
 
+        // get the connection object from the database connection class
+        DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+        var conn = databaseConnection.getConnection();
+
+        var statement = conn.createStatement();
+        final var rs = statement.executeQuery("SELECT CURRENT_TIMESTAMP;");
+
+        while (rs.next()) {
+            Object object = rs.getObject(1);
+            System.out.println(object.toString());
+        }
+
+
+        rs.close();
+        statement.closeOnCompletion();
+
+        databaseConnection.close();
     }
 
 }
